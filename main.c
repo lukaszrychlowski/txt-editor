@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <SDL.h>
 
-#include "font.h"
+#include "/Users/ryszard/txt-editor/font.h"
 
 void scc(int code){
     if (code < 0){
