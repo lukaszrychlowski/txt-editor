@@ -1,7 +1,10 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <SDL.h>
+
+#include "font.h"
 
 void scc(int code){
     if (code < 0){
@@ -10,7 +13,7 @@ void scc(int code){
     }
 }
 
-void *scp(void *ptr){
+void *scp(void *ptr){                        //sdl check pointer
     if (ptr == NULL){
         fprintf(stderr, "SDL ERROR: %s\n", SDL_GetError());
         exit(1);
@@ -20,13 +23,26 @@ void *scp(void *ptr){
 
 int main(void){
     scc(SDL_Init(SDL_INIT_VIDEO));
-    SDL_Window *window = SDL_CreateWindow(
+    SDL_Window *window = scp(SDL_CreateWindow(
                             "txt-editor",
                             0, 0, 800, 600,
-                            SDL_WINDOW_RESIZABLE);
+                            SDL_WINDOW_RESIZABLE));
 
     SDL_Renderer *renderer = 
         scp(SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
+
+    SDL_Surface *surface = 
+        scp(SDL_CreateRGBSurfaceFrom(
+            FONT, FONT_WIDTH, FONT_HEIGHT,
+            8, FONT_WIDTH,
+            255, 255, 255, 255));
+
+    SDL_Texture *texture =
+        scp(SDL_CreateTexture(
+                renderer,
+                SDL_PIXELFORMAT_INDEX8,
+                SDL_TEXTUREACCESS_STATIC, 
+                FONT_WIDTH, FONT_HEIGHT));
 
     bool quit = false;
     while (!quit){
@@ -39,7 +55,7 @@ int main(void){
                 break;
                 } 
             }
-            scc(SDL_SetRenderDrawColor(renderer, 100, 50, 0, 0));
+            scc(SDL_SetRenderDrawColor(renderer, 10, 10, 0, 0));
             scc(SDL_RenderClear(renderer));
             SDL_RenderPresent(renderer);
     }
